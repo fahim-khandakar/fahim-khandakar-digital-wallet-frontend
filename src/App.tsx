@@ -1,8 +1,11 @@
+import { Outlet } from "react-router";
+import CommonLayout from "./components/layout/CommonLayout";
+
 function App() {
   return (
-    <>
-      <h1>Hello world</h1>
-    </>
+    <CommonLayout>
+      <Outlet />
+    </CommonLayout>
   );
 }
 
