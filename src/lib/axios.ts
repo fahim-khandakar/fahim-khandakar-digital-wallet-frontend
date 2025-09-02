@@ -1,4 +1,6 @@
 import config from "@/config";
+import { authKey } from "@/constants/constants";
+import { getFromLocalStorage } from "@/utils/local_storage";
 import axios, { type AxiosRequestConfig } from "axios";
 
 export const axiosInstance = axios.create({
@@ -6,57 +8,44 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Add a request interceptor
 axiosInstance.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
-
-    return config;
+  (request) => {
+    const token = getFromLocalStorage(authKey);
+    if (token && request.headers) {
+      request.headers["Authorization"] = token;
+    }
+    return request;
   },
-  function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
+// 🔹 Response interceptor for token refresh
 let isRefreshing = false;
-
 let pendingQueue: {
   resolve: (value: unknown) => void;
   reject: (value: unknown) => void;
 }[] = [];
 
 const processQueue = (error: unknown) => {
-  pendingQueue.forEach((promise) => {
-    if (error) {
-      promise.reject(error);
-    } else {
-      promise.resolve(null);
-    }
+  pendingQueue.forEach((p) => {
+    if (error) p.reject(error);
+    else p.resolve(null);
   });
-
   pendingQueue = [];
 };
 
-// Add a response interceptor
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
-    // console.log("Request failed", error.response.data.message);
-
     const originalRequest = error.config as AxiosRequestConfig & {
-      _retry: boolean;
+      _retry?: boolean;
     };
 
     if (
-      error.response.status === 500 &&
-      error.response.data.message === "jwt expired" &&
+      error.response?.status === 500 &&
+      error.response?.data?.message === "jwt expired" &&
       !originalRequest._retry
     ) {
-      console.log("Your token is expired");
-
       originalRequest._retry = true;
 
       if (isRefreshing) {
@@ -64,26 +53,28 @@ axiosInstance.interceptors.response.use(
           pendingQueue.push({ resolve, reject });
         })
           .then(() => axiosInstance(originalRequest))
-          .catch((error) => Promise.reject(error));
+          .catch((err) => Promise.reject(err));
       }
 
       isRefreshing = true;
       try {
         const res = await axiosInstance.post("/auth/refresh-token");
-        console.log("New Token arrived", res);
+        const newToken = res.data?.token;
+
+        if (newToken) {
+          localStorage.setItem(authKey, newToken); // update localStorage
+        }
 
         processQueue(null);
-
         return axiosInstance(originalRequest);
-      } catch (error) {
-        processQueue(error);
-        return Promise.reject(error);
+      } catch (err) {
+        processQueue(err);
+        return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
     }
 
-    //* For Everything
     return Promise.reject(error);
   }
 );

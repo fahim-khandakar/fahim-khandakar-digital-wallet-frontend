@@ -13,12 +13,10 @@ import {
 } from "@/components/ui/popover";
 import { ModeToggle } from "./ModeToggler";
 import { Link } from "react-router";
-import {
-  authApi,
-  useLogoutMutation,
-  useUserInfoQuery,
-} from "@/redux/features/auth/auth.api";
+import { authApi, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
+import { removeFromLocalStorage } from "@/utils/local_storage";
+import { authKey, refreshToken } from "@/constants/constants";
 
 const navigationLinks = [
   { href: "/", label: "Home" },
@@ -31,12 +29,12 @@ const navigationLinks = [
 
 export default function Navbar() {
   const { data } = useUserInfoQuery(undefined);
-  const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    await logout(undefined);
     dispatch(authApi.util.resetApiState());
+    removeFromLocalStorage(authKey);
+    removeFromLocalStorage(refreshToken);
   };
 
   return (
@@ -137,7 +135,7 @@ export default function Navbar() {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="text-sm"
+              className="text-sm cursor-pointer"
             >
               Logout
             </Button>

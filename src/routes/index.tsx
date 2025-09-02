@@ -6,7 +6,7 @@ import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
 import { withAuth } from "@/utils/withAuth";
-import Unauthorized from "@/pages/Unauthorized";
+import Unauthorized from "@/pages/Unauthorized/Unauthorized";
 import { role } from "@/constants/role";
 import { type TRole } from "@/types";
 import Homepage from "@/pages/Home/Home";
@@ -14,6 +14,8 @@ import Feature from "@/pages/Feature/Feature";
 import Contact from "@/pages/Contact/Contact";
 import FAQ from "@/pages/FAQ/Faq";
 import Dashboard from "@/pages/Dashboard/Dashboard";
+import Login from "@/pages/Authentication/Login/Login";
+import Register from "@/pages/Authentication/Register/Register";
 
 export const router = createBrowserRouter([
   {
@@ -59,11 +61,11 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: Dashboard,
+    Component: Login,
     path: "/login",
   },
   {
-    Component: Dashboard,
+    Component: Register,
     path: "/register",
   },
   {
