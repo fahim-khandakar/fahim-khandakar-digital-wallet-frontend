@@ -25,7 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="items-center">
+      <SidebarHeader className="items-center h-auto w-36 mx-auto">
         <Link to="/">
           <Logo />
         </Link>

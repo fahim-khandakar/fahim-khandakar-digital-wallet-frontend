@@ -42,13 +42,22 @@ export default function Login() {
   const onSubmit = async (data: LoginFormValues) => {
     const toastId = toast.loading("login....");
 
-    const result: any = await login(data);
-    if (result?.data?.success) {
-      toast.success("Logged In Successfully", { id: toastId });
-      setToLocalStorage(authKey, result?.data?.data?.accessToken);
-      setToLocalStorage(refreshToken, result?.data?.data?.refreshToken);
-      navigate("/");
-      form.reset();
+    try {
+      const result: any = await login(data);
+      console.log("result", result);
+      if (result?.data?.success) {
+        toast.success("Logged In Successfully", { id: toastId });
+        setToLocalStorage(authKey, result?.data?.data?.accessToken);
+        setToLocalStorage(refreshToken, result?.data?.data?.refreshToken);
+        navigate("/");
+        form.reset();
+      } else {
+        toast.error(result?.error?.data?.message || "Login failed", {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Something went wrong!", { id: toastId });
     }
   };
 

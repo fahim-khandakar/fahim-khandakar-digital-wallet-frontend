@@ -8,30 +8,30 @@ export const adminSidebarItems: ISidebarItem[] = [
     title: "Dashboard",
     items: [
       {
-        title: "Analytics",
-        url: "/admin/analytics",
+        title: "Dashboard",
+        url: "/dashboard/analytics",
         component: Dashboard,
       },
     ],
   },
-  {
-    title: "Tour Management",
-    items: [
-      {
-        title: "Add Tour Type",
-        url: "/admin/add-tour-type",
-        component: Dashboard,
-      },
-      {
-        title: "Add Division",
-        url: "/admin/add-division",
-        component: Dashboard,
-      },
-      {
-        title: "Add Tour",
-        url: "/admin/add-tour",
-        component: Dashboard,
-      },
-    ],
-  },
+  // {
+  //   title: "Tour Management",
+  //   items: [
+  //     {
+  //       title: "Add Tour Type",
+  //       url: "/admin/add-tour-type",
+  //       component: Dashboard,
+  //     },
+  //     {
+  //       title: "Add Division",
+  //       url: "/admin/add-division",
+  //       component: Dashboard,
+  //     },
+  //     {
+  //       title: "Add Tour",
+  //       url: "/admin/add-tour",
+  //       component: Dashboard,
+  //     },
+  //   ],
+  // },
 ];
