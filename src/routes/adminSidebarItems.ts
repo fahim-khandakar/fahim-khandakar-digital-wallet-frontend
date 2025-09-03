@@ -1,4 +1,7 @@
 import Dashboard from "@/pages/Dashboard/Dashboard";
+import Transaction from "@/pages/Transaction/Transaction/Transaction";
+import UserList from "@/pages/User/User List/UserList";
+import Wallet from "@/pages/Wallet/Wallets/Wallet";
 import { type ISidebarItem } from "@/types";
 
 // const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
@@ -14,24 +17,24 @@ export const adminSidebarItems: ISidebarItem[] = [
       },
     ],
   },
-  // {
-  //   title: "Tour Management",
-  //   items: [
-  //     {
-  //       title: "Add Tour Type",
-  //       url: "/admin/add-tour-type",
-  //       component: Dashboard,
-  //     },
-  //     {
-  //       title: "Add Division",
-  //       url: "/admin/add-division",
-  //       component: Dashboard,
-  //     },
-  //     {
-  //       title: "Add Tour",
-  //       url: "/admin/add-tour",
-  //       component: Dashboard,
-  //     },
-  //   ],
-  // },
+  {
+    title: "User",
+    items: [
+      {
+        title: "User List",
+        url: "/dashboard/user-list",
+        component: UserList,
+      },
+      {
+        title: "Wallet List",
+        url: "/dashboard/wallets",
+        component: Wallet,
+      },
+      {
+        title: "Transaction List",
+        url: "/dashboard/transactions",
+        component: Transaction,
+      },
+    ],
+  },
 ];

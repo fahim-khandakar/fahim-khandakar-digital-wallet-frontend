@@ -17,15 +17,7 @@ import { authApi, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { removeFromLocalStorage } from "@/utils/local_storage";
 import { authKey, refreshToken } from "@/constants/constants";
-
-const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/feature", label: "Feature" },
-  { href: "/contact", label: "Contact" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/dashboard", label: "Dashboard" },
-];
+import { role } from "@/constants/role";
 
 export default function Navbar() {
   const { data } = useUserInfoQuery(undefined);
@@ -36,6 +28,18 @@ export default function Navbar() {
     removeFromLocalStorage(authKey);
     removeFromLocalStorage(refreshToken);
   };
+
+  const navigationLinks = [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/feature", label: "Feature" },
+    { href: "/contact", label: "Contact" },
+    { href: "/faq", label: "FAQ" },
+    {
+      href: data?.data?.role === role.admin ? "/dashboard" : "/user",
+      label: "Dashboard",
+    },
+  ];
 
   return (
     <header className="border-b">

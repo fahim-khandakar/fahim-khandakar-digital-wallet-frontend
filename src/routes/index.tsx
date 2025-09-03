@@ -56,7 +56,7 @@ export const router = createBrowserRouter([
     Component: withAuth(DashboardLayout, role.user as TRole),
     path: "/user",
     children: [
-      { index: true, element: <Navigate to="/user/bookings" /> },
+      { index: true, element: <Navigate to="/user/analytics" /> },
       ...generateRoutes(userSidebarItems),
     ],
   },
